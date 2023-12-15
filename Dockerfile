@@ -43,16 +43,17 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-RUN npm init -y &&  \
-    npm i puppeteer \
+RUN npm init -y
+RUN npm i puppeteer 
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
-    && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /node_modules \
-    && chown -R pptruser:pptruser /package.json \
-    && chown -R pptruser:pptruser /package-lock.json
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser
+RUN mkdir -p /home/pptruser/Downloads 
+RUN mkdir -p /node_modules
+RUN chown -R pptruser:pptruser /home/pptruser 
+RUN chown -R pptruser:pptruser /node_modules 
+#RUN chown -R pptruser:pptruser /package.json 
+#RUN chown -R pptruser:pptruser /package-lock.json
 
 # Run everything after as non-privileged user.
 USER pptruser
