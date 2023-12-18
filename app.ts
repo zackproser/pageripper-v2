@@ -26,8 +26,17 @@ app.post('/parse', async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
 
+// Handle Ctrl+C (SIGINT) interrupt
+process.on('SIGINT', () => {
+  console.log('SIGINT signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    // Perform any additional cleanup here if necessary
+    process.exit(0);
+  });
+});
