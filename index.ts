@@ -2,7 +2,6 @@
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as docker from "@pulumi/docker";
-import * as pulumi from "@pulumi/pulumi";
 
 
 // Create an ECR repository to store the Docker image.
@@ -10,6 +9,7 @@ const repo = new aws.ecr.Repository("api-repo", {
   forceDelete: true,
 });
 
+// Set up auth for the ECR repository
 const registryInfo = repo.registryId.apply(async id => {
   const credentials = await aws.ecr.getCredentials({ registryId: id });
   const decodedCredentials = Buffer.from(credentials.authorizationToken, "base64").toString();
@@ -112,7 +112,7 @@ const apiService = new awsx.ecs.FargateService("frontend-service", {
       essential: true,
       portMappings: [{
         containerPort: 3000,
-        hostPort: 3000, // May be removed, must match containerPort if present
+        hostPort: 3000,
         targetGroup: alb.defaultTargetGroup,
       }],
       logConfiguration: {

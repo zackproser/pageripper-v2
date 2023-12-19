@@ -2,7 +2,7 @@
   "name": "pageripper-v2",
   "version": "1.0.0",
   "description": "The Page ripper API which extracts data from URLs",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start": "ts-node app.ts",
     "build": "tsc",
