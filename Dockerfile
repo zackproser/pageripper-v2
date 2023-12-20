@@ -27,6 +27,7 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 
+RUN npm install -g pnpm@8.6.12
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
@@ -43,8 +44,9 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-RUN npm init -y
-RUN npm i puppeteer 
+#RUN npm init -y
+RUN pnpm add puppeteer 
+RUN pnpm add express
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser
