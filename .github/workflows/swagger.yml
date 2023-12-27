@@ -1,0 +1,27 @@
+name: Update Swagger UI
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/swagger.yaml'
+jobs:
+  update-swagger-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Install swagger-ui-cli
+        run: npm install -g swagger-ui-cli
+      - name: Generate Swagger UI
+        run: swagger-ui-cli bundle docs/swagger.yaml -o public/swagger-ui/swagger.json
+      - name: Commit and Push Swagger UI updates
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add public/swagger-ui/swagger.json
+          git commit -m "Update Swagger UI" || echo "No changes to commit"
+          git push || echo "No changes to push"
