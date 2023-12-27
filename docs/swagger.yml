@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Pageripper
+  title: Pageripper V2
   description: An API service for extracting different types of content from webpages.
   version: 1.0.0
 paths:
