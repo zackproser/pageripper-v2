@@ -44,8 +44,8 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-#RUN npm init -y
-RUN pnpm add puppeteer 
+RUN npm init -y
+RUN sudo npm install -g puppeteer --unsafe-perm=true
 RUN pnpm add express
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
