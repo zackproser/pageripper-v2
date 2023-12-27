@@ -44,7 +44,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN npm init -y
-RUN npm i puppeteer 
+RUN sudo npm install -g puppeteer --unsafe-perm=true
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser
