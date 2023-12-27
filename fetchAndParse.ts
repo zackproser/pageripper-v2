@@ -5,23 +5,23 @@ type ParseOptions = {
   includeEmails: boolean;
   includeTwitterHandles: boolean;
   includeUrls: boolean;
+  waitUntilEvent?: 'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
 };
 
 // Main function to fetch and parse a webpage
 async function fetchAndParse(url: string, options: ParseOptions) {
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: 'new',
     executablePath: '/usr/bin/google-chrome',
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ]
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'networkidle2' });
+
+  // Use the specified waitUntil event or default to 'domcontentloaded'
+  const waitUntilEvent = options.waitUntilEvent || 'domcontentloaded';
+  await page.goto(url, { waitUntil: waitUntilEvent });
 
   const content = await page.content();
-  console.log(`content: ${content}`)
 
   // Extract data based on options
   const extractedData = {
