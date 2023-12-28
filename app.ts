@@ -7,6 +7,11 @@ const port = 3000;
 // Middlewares
 app.use(express.json());
 
+// Health Check Endpoint
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Define the route for fetching and parsing a webpage
 app.post('/parse', async (req, res) => {
   try {

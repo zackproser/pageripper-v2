@@ -5,10 +5,14 @@
 
 ![pageripperv2](./img/pageripper-v2.png)
 
-## Deploying 
+A data-extracting API that can handle any type of website, including single page applications rendered via Javascript.
 
-`pulumi config set aws:profile <pulumi>`
+## API Documentation 
 
-`pulumi config set aws:region us-east-1`
+[Read the Docs](https://zackproser.github.io/pageripper-v2/)
 
-`pulumi up`
+## Getting started
+
+
+
+
