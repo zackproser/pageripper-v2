@@ -20,7 +20,7 @@ jobs:
       - name: redoc-cli test
         uses: seeebiii/redoc-cli-github-action@v10
         with:
-          args: 'build-docs ./spec/swagger.yml --output=./docs/index.html'
+          args: 'build-docs spec/swagger.yml --output=docs/index.html'
       - name: Commit and Push Swagger UI updates
         run: |
           git config --global user.name 'GitHub Action'
