@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import cheerio from 'cheerio';
+import { URL } from 'url';
 
 // Define a type for the parse options
 type ParseOptions = {
@@ -10,7 +11,7 @@ type ParseOptions = {
 };
 
 // Main function to fetch and parse a webpage
-async function fetchAndParse(url: string, options: ParseOptions) {
+async function fetchAndParse(targetUrl: string, options: ParseOptions) {
   const browser = await puppeteer.launch({
     headless: 'new',
     executablePath: '/usr/bin/google-chrome',
@@ -20,7 +21,7 @@ async function fetchAndParse(url: string, options: ParseOptions) {
 
   // Use the specified waitUntil event or default to 'domcontentloaded'
   const waitUntilEvent = options.waitUntilEvent || 'domcontentloaded';
-  await page.goto(url, { waitUntil: waitUntilEvent });
+  await page.goto(targetUrl, { waitUntil: waitUntilEvent });
 
   const content = await page.content();
   const $ = cheerio.load(content);
@@ -29,11 +30,37 @@ async function fetchAndParse(url: string, options: ParseOptions) {
   const extractedData = {
     emails: options.includeEmails ? extractEmails($) : [],
     twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
-    urls: options.includeUrls ? extractUrls($) : [],
+    urls: options.includeUrls ? categorizeUrls($, new URL(targetUrl).hostname) : [],
   };
 
   await browser.close();
   return extractedData;
+}
+
+function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
+  const internalUrls: string[] = [];
+  const externalUrls: string[] = [];
+
+  $('a').each((i, link) => {
+    const href = $(link).attr('href');
+    if (href) {
+      try {
+        const linkUrl = new URL(href, `https://${baseHostname}`);
+        if (linkUrl.hostname === baseHostname) {
+          internalUrls.push(linkUrl.href);
+        } else {
+          externalUrls.push(linkUrl.href);
+        }
+      } catch (error) {
+        console.error('Invalid URL:', href, error);
+      }
+    }
+  });
+
+  return {
+    internal: Array.from(new Set(internalUrls)),
+    external: Array.from(new Set(externalUrls))
+  };
 }
 
 function extractEmails($: cheerio.Root): string[] {
@@ -46,21 +73,5 @@ function extractTwitterHandles($: cheerio.Root): string[] {
   return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
 }
 
-function extractUrls($: cheerio.Root): string[] {
-  const urls: string[] = [];
-  $('a').each((i, link) => {
-    const href = $(link).attr('href');
-    if (href && href.startsWith('http')) {
-      urls.push(href);
-    }
-  });
-  return Array.from(new Set(urls));
-}
-
-export {
-  fetchAndParse,
-  extractEmails,
-  extractTwitterHandles,
-  extractUrls
-};
+export { fetchAndParse };
 
