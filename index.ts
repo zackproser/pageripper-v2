@@ -73,7 +73,7 @@ const alb = new awsx.lb.ApplicationLoadBalancer("alb", {
 
 
 // Create a security group for the frontend service
-const frontendSecurityGroup = new aws.ec2.SecurityGroup("frontend-security-group", {
+const apiSecurityGroup = new aws.ec2.SecurityGroup("api-security-group", {
   vpcId: vpc.vpcId,
   egress: [{
     protocol: "-1",
@@ -90,22 +90,22 @@ const frontendSecurityGroup = new aws.ec2.SecurityGroup("frontend-security-group
 });
 
 // Create an ECS cluster.
-const cluster = new aws.ecs.Cluster("my-cluster", {});
+const cluster = new aws.ecs.Cluster("pageripper", {});
 
 // Define the log group for the Fargate service.
-const logGroup = new aws.cloudwatch.LogGroup("my-log-group");
+const logGroup = new aws.cloudwatch.LogGroup("pageripper");
 
-const apiService = new awsx.ecs.FargateService("frontend-service", {
+const apiService = new awsx.ecs.FargateService("pageripper", {
   cluster: cluster.arn,
   desiredCount: 2,
   networkConfiguration: {
     assignPublicIp: true,
-    securityGroups: [frontendSecurityGroup.id],
+    securityGroups: [apiSecurityGroup.id],
     subnets: vpc.publicSubnetIds,
   },
   taskDefinitionArgs: {
     container: {
-      name: "frontend",
+      name: "pageripper",
       image: repoDigest,
       cpu: 512,
       memory: 1024,
@@ -120,7 +120,7 @@ const apiService = new awsx.ecs.FargateService("frontend-service", {
         options: {
           "awslogs-group": logGroup.name,
           "awslogs-region": 'us-east-1',
-          "awslogs-stream-prefix": "frontend"
+          "awslogs-stream-prefix": "pageripper"
         }
       },
       environment: [
@@ -129,18 +129,4 @@ const apiService = new awsx.ecs.FargateService("frontend-service", {
   },
 });
 
-
-// Create an API Gateway to route traffic to the Fargate service.
-/*const api = new awsx.api.API("my-api", {
-  routes: [
-    {
-      path: "/",
-      target: apiService,
-      method: "ANY",
-    },
-  ],
-});*/
-
-// Export the API URL and the ECR repository URL.
-//export const apiUrl = api.url;
 export const repositoryUrl = repo.repositoryUrl;

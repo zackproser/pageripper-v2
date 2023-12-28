@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 // Define the route for fetching and parsing a webpage
-app.post('/parse', async (req, res) => {
+app.post('/extracts', async (req, res) => {
   try {
     const { url, options } = req.body;
     if (!url) {
