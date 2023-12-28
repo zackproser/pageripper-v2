@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/swagger.yml'
+      - 'spec/swagger.yml'
   workflow_dispatch:
 jobs:
   update-swagger-ui:
@@ -18,11 +18,11 @@ jobs:
       - name: redoc-cli test
         uses: seeebiii/redoc-cli-github-action@v10
         with:
-          args: 'bundle ./docs/swagger.yml -o ./dist/swagger-ui/swagger.json'
+          args: 'bundle docs/swagger.yml -o docs/swagger-ui/swagger.json'
       - name: Commit and Push Swagger UI updates
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add ./dist/swagger-ui/swagger.json
+          git add docs/swagger-ui/swagger.json
           git commit -m "Update Swagger UI" || echo "No changes to commit"
           git push || echo "No changes to push"
