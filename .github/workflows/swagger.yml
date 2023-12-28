@@ -20,7 +20,7 @@ jobs:
           npm install -g swagger-ui-cli
           echo "NODE_PATH=$(npm root -g)" >> $GITHUB_ENV
       - name: Generate Swagger UI
-        run: swagger-ui-cli bundle docs/swagger.yml -o public/swagger-ui/swagger.json
+        run: swagger-ui bundle docs/swagger.yml -o public/swagger-ui/swagger.json
       - name: Commit and Push Swagger UI updates
         run: |
           git config --global user.name 'GitHub Action'
