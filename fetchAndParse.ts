@@ -19,22 +19,34 @@ async function fetchAndParse(targetUrl: string, options: ParseOptions) {
   });
   const page = await browser.newPage();
 
-  // Use the specified waitUntil event or default to 'domcontentloaded'
   const waitUntilEvent = options.waitUntilEvent || 'domcontentloaded';
   await page.goto(targetUrl, { waitUntil: waitUntilEvent });
 
   const content = await page.content();
   const $ = cheerio.load(content);
 
-  // Extract data based on options
   const extractedData = {
     emails: options.includeEmails ? extractEmails($) : [],
     twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
+    socialMediaLinks: extractSocialMediaLinks($),
+    mediaContentLinks: extractMediaContentLinks($),
+    downloadLinks: extractDownloadLinks($),
+    ecommerceLinks: extractEcommerceLinks($),
     urls: options.includeUrls ? categorizeUrls($, new URL(targetUrl).hostname) : [],
   };
 
   await browser.close();
   return extractedData;
+}
+
+function extractEmails($: cheerio.Root): string[] {
+  const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
+  return Array.from(new Set($('body').text().match(emailRegex) || []));
+}
+
+function extractTwitterHandles($: cheerio.Root): string[] {
+  const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b/g;
+  return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
 }
 
 function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
@@ -63,14 +75,35 @@ function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: stri
   };
 }
 
-function extractEmails($: cheerio.Root): string[] {
-  const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
-  return Array.from(new Set($('body').text().match(emailRegex) || []));
+function extractSocialMediaLinks($: cheerio.Root): string[] {
+  const socialMediaPatterns = [/facebook\.com/, /twitter\.com/, /instagram\.com/, /linkedin\.com/];
+  return extractLinksByPattern($, socialMediaPatterns);
 }
 
-function extractTwitterHandles($: cheerio.Root): string[] {
-  const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b/g;
-  return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
+function extractMediaContentLinks($: cheerio.Root): string[] {
+  const mediaContentPatterns = [/\.(jpeg|jpg|gif|png|bmp)$/, /\.(mp4|avi|mov)$/, /\.(mp3|wav)$/];
+  return extractLinksByPattern($, mediaContentPatterns);
+}
+
+function extractDownloadLinks($: cheerio.Root): string[] {
+  const downloadPatterns = [/\.(pdf|exe|docx|zip)$/];
+  return extractLinksByPattern($, downloadPatterns);
+}
+
+function extractEcommerceLinks($: cheerio.Root): string[] {
+  const ecommercePatterns = [/amazon\.com/, /ebay\.com/, /etsy\.com/, /shopify\.com/];
+  return extractLinksByPattern($, ecommercePatterns);
+}
+
+function extractLinksByPattern($: cheerio.Root, patterns: RegExp[]): string[] {
+  const links: string[] = [];
+  $('a').each((i, link) => {
+    const href = $(link).attr('href');
+    if (href && patterns.some(pattern => pattern.test(href))) {
+      links.push(href);
+    }
+  });
+  return Array.from(new Set(links));
 }
 
 export { fetchAndParse };
