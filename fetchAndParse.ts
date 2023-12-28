@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import cheerio from 'cheerio';
 
 // Define a type for the parse options
 type ParseOptions = {
@@ -22,33 +23,44 @@ async function fetchAndParse(url: string, options: ParseOptions) {
   await page.goto(url, { waitUntil: waitUntilEvent });
 
   const content = await page.content();
+  const $ = cheerio.load(content);
 
   // Extract data based on options
   const extractedData = {
-    emails: options.includeEmails ? extractEmails(content) : [],
-    twitterHandles: options.includeTwitterHandles ? extractTwitterHandles(content) : [],
-    urls: options.includeUrls ? extractUrls(content) : [],
+    emails: options.includeEmails ? extractEmails($) : [],
+    twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
+    urls: options.includeUrls ? extractUrls($) : [],
   };
 
   await browser.close();
   return extractedData;
 }
 
-// Regex functions
-function extractEmails(content: string): string[] {
+function extractEmails($: cheerio.Root): string[] {
   const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
-  return Array.from(new Set(content.match(emailRegex) || []));
+  return Array.from(new Set($('body').text().match(emailRegex) || []));
 }
 
-function extractTwitterHandles(content: string): string[] {
+function extractTwitterHandles($: cheerio.Root): string[] {
   const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b/g;
-  return Array.from(new Set(content.match(twitterHandleRegex)?.map(handle => `@${handle.trim()}`) || []));
+  return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
 }
 
-function extractUrls(content: string): string[] {
-  const urlRegex = /https?:\/\/[^\s$.?#].[^\s]*/g;
-  return Array.from(new Set(content.match(urlRegex) || []));
+function extractUrls($: cheerio.Root): string[] {
+  const urls: string[] = [];
+  $('a').each((i, link) => {
+    const href = $(link).attr('href');
+    if (href && href.startsWith('http')) {
+      urls.push(href);
+    }
+  });
+  return Array.from(new Set(urls));
 }
 
-export { fetchAndParse, extractEmails, extractTwitterHandles, extractUrls };
+export {
+  fetchAndParse,
+  extractEmails,
+  extractTwitterHandles,
+  extractUrls
+};
 
