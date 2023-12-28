@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Pageripper V2
+  title: Pageripper
   description: An API service for extracting different types of content from webpages.
   version: 1.0.0
 paths:
@@ -8,7 +8,7 @@ paths:
     post:
       summary: Extracts data from a webpage
       description: >
-        Submits a request to extract data such as emails, Twitter handles, and URLs from the specified webpage.
+        Submits a request to extract data such as emails, Twitter handles, social media links, media content links, download links, e-commerce links, and categorized URLs from the specified webpage.
 
       requestBody:
         required: true
@@ -60,6 +60,29 @@ paths:
                     items:
                       type: string
                   urls:
+                    type: object
+                    properties:
+                      internal:
+                        type: array
+                        items:
+                          type: string
+                      external:
+                        type: array
+                        items:
+                          type: string
+                  socialMediaLinks:
+                    type: array
+                    items:
+                      type: string
+                  mediaContentLinks:
+                    type: array
+                    items:
+                      type: string
+                  downloadLinks:
+                    type: array
+                    items:
+                      type: string
+                  ecommerceLinks:
                     type: array
                     items:
                       type: string
