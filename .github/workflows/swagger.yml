@@ -15,10 +15,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+      - name: Ensure docs path exists
+        run: mkdir -p docs
       - name: redoc-cli test
         uses: seeebiii/redoc-cli-github-action@v10
         with:
-          args: 'bundle spec/swagger.yml'
+          args: 'build-docs ./spec/swagger.yml --output=./docs/index.html'
       - name: Commit and Push Swagger UI updates
         run: |
           git config --global user.name 'GitHub Action'
