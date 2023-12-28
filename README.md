@@ -3,7 +3,7 @@
 [![CI](https://github.com/zackproser/pageripper-v2/actions/workflows/ci.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/ci.yml)
 [![Swagger spec up to date](https://github.com/zackproser/pageripper-v2/actions/workflows/swagger.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/swagger.yml)
 
-![pageripperv2](./docs/pageripper-v2.png)
+![pageripperv2](./img/pageripper-v2.png)
 
 ## Deploying 
 
