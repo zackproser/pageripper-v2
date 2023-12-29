@@ -21,6 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+      - name: Ensure Pulumi config has correct AWS region set
+        run: pulumi config set aws:region ${{ secrets.AWS_REGION }}
       - name: Run Pulumi preview
         uses: pulumi/actions@v3
         with:
