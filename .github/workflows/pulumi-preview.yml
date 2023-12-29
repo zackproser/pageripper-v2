@@ -1,6 +1,8 @@
 name: Pulumi
 on:
   - pull_request
+env:
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 jobs:
   preview:
     name: Preview
@@ -28,5 +30,3 @@ jobs:
         with:
           command: preview
           stack-name: pageripper-dev
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
