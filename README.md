@@ -39,13 +39,14 @@ sequenceDiagram
 
 To use Pageripper,  send a POST request to /extracts with the target URL and options. Example:
 
-javascript
+```javascript
 
 // Example request using Node.js
 const response = await fetch('http://api.pageripper.com/extracts', {
   method: 'POST',
   body: JSON.stringify({ url: 'https://example.com', options: {...} })
 });
+```
 
 The production instance of the Pageripper API is [up and available on RapidAPI](https://rapidapi.com/zackproser/api/pageripper)
 
