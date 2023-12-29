@@ -123,10 +123,12 @@ const apiService = new awsx.ecs.FargateService("pageripper", {
           "awslogs-stream-prefix": "pageripper"
         }
       },
-      environment: [
-      ],
+      environment: [],
     },
   },
 });
 
+// Outputs
 export const repositoryUrl = repo.repositoryUrl;
+// Output the load balancer URL
+export const loadBalancerUrl = alb.loadBalancer.dnsName;
