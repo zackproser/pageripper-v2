@@ -23,6 +23,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+      - name: Ensure pulumi has correct stack selected
+        run: pulumi stack select pageripper-dev
       - name: Ensure Pulumi config has correct AWS region set
         run: pulumi config set aws:region ${{ secrets.AWS_REGION }}
       - name: Run Pulumi preview
