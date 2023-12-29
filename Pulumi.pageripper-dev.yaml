@@ -1,3 +1,2 @@
-config:
-  aws:profile: pulumi
-  aws:region: us-east-1
+environment:
+  - pageripper-v2-pageripper-dev
