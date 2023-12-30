@@ -1,12 +1,12 @@
-name: Update Swagger UI
+name: OpenAPI spec current
 on:
   push:
     branches: [main]
     paths:
-      - 'spec/swagger.yml'
+      - 'spec/openapi.yml'
   workflow_dispatch:
 jobs:
-  update-swagger-ui:
+  update-openapi-ui:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,11 +20,12 @@ jobs:
       - name: redoc-cli test
         uses: seeebiii/redoc-cli-github-action@v10
         with:
-          args: 'build-docs spec/swagger.yml --output docs/index.html'
-      - name: Commit and Push Swagger UI updates
+          args: 'build-docs spec/openapi.yml --output docs/index.html'
+      - name: Commit and Push openapi UI updates
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
+          git diff 
           git add docs
           git commit -m "Update API docs" || echo "No changes to commit"
           git push || echo "No changes to push"

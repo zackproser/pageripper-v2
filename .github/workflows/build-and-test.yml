@@ -1,11 +1,11 @@
-name: Pageripper CI
+name: Pageripper Tests
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 jobs:
-  build:
+  npm-build-and-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
