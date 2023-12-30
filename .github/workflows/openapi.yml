@@ -23,6 +23,13 @@ jobs:
           output: docs
           spec-file: spec/openapi.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: Zachary Proser
+          author_email: zackproser@gmail.com
+          message: 'Update OpenAPI spec'
+          add: 'docs'
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
