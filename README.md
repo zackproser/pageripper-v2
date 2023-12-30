@@ -1,7 +1,8 @@
 # Pageripper v2 
 
-[![CI](https://github.com/zackproser/pageripper-v2/actions/workflows/ci.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/ci.yml)
-[![Swagger spec up to date](https://github.com/zackproser/pageripper-v2/actions/workflows/swagger.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/swagger.yml)
+[![Pageripper Tests](https://github.com/zackproser/pageripper-v2/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/build-and-test.yml)
+[![OpenAPI spec current](https://github.com/zackproser/pageripper-v2/actions/workflows/openapi.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/openapi.yml)
+[![Pulumi Deploy](https://github.com/zackproser/pageripper-v2/actions/workflows/pulumi-deploy.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/pulumi-deploy.yml)
 
 ![pageripperv2](./img/pageripper-v2.png)
 
