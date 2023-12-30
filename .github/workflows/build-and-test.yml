@@ -21,7 +21,7 @@ jobs:
       - run: npm test
   docker-build:
     runs-on: ubuntu-latest
-    needs: build
+    needs: npm-build-and-test
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
