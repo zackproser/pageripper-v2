@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Pageripper
+  description: An API service for extracting different types of content from webpages.
+  version: 1.0.0
+paths:
+  /extracts:
+    post:
+      summary: Extracts data from a webpage
+      description: >
+        Submits a request to extract data such as emails, Twitter handles, social media links, media content links, download links, e-commerce links, and categorized URLs from the specified webpage.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL of the webpage to extract data from.
+                  example: 'https://www.example.com'
+                options:
+                  type: object
+                  properties:
+                    includeEmails:
+                      type: boolean
+                      description: Include emails in the extraction.
+                      example: true
+                    includeTwitterHandles:
+                      type: boolean
+                      description: Include Twitter handles in the extraction.
+                      example: false
+                    includeUrls:
+                      type: boolean
+                      description: Include URLs in the extraction.
+                      example: true
+                    waitUntilEvent:
+                      type: string
+                      description: Browser event to wait for before extraction.
+                      enum: ['load', 'domcontentloaded', 'networkidle0', 'networkidle2']
+                      example: 'domcontentloaded'
+              required:
+                - url
+      responses:
+        '200':
+          description: Successfully extracted data from the webpage.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emails:
+                    type: array
+                    items:
+                      type: string
+                  twitterHandles:
+                    type: array
+                    items:
+                      type: string
+                  urls:
+                    type: object
+                    properties:
+                      internal:
+                        type: array
+                        items:
+                          type: string
+                      external:
+                        type: array
+                        items:
+                          type: string
+                  socialMediaLinks:
+                    type: array
+                    items:
+                      type: string
+                  mediaContentLinks:
+                    type: array
+                    items:
+                      type: string
+                  downloadLinks:
+                    type: array
+                    items:
+                      type: string
+                  ecommerceLinks:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Invalid request (e.g., missing URL).
+        '500':
+          description: Server error while processing the request.
