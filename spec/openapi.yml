@@ -20,7 +20,7 @@ paths:
                 url:
                   type: string
                   description: The URL of the webpage to extract data from.
-                  example: 'https://www.example.com'
+                  example: 'https://www.nytimes.com'
                 options:
                   type: object
                   properties:
