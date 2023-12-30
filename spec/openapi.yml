@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Pageripper
-  description: An API service for extracting different types of content from webpages.
+  description: A data-extraction API that retrieves and categorizes links, social media handles, emails and more from webpages, including Single Page Applications (SPAs) that rely heavily on Javascript for rendering.
   version: 1.0.0
 paths:
   /extracts:
