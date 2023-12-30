@@ -1,0 +1,16 @@
+name: OpenAPI spec valid
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'spec/openapi.yml'
+  workflow_dispatch:
+jobs:
+  update-openapi-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate OpenAPI spec
+        uses: mbowman100/swagger-validator-action@master
+        with:
+          files: |
+            spec/openapi.yml 
