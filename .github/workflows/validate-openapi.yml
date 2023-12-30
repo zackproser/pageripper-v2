@@ -7,10 +7,9 @@ on:
   workflow_dispatch:
 jobs:
   update-openapi-ui:
+    container: gkarthics/swagger-validate:0.2.0
     runs-on: ubuntu-latest
     steps:
-      - name: Validate OpenAPI spec
-        uses: mbowman100/swagger-validator-action@master
-        with:
-          files: |
-            spec/openapi.yml 
+      - uses: actions/checkout@v3
+      - name: validate
+        run: validate spec
