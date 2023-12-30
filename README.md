@@ -2,6 +2,7 @@
 
 [![Pageripper Tests](https://github.com/zackproser/pageripper-v2/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/build-and-test.yml)
 [![OpenAPI spec current](https://github.com/zackproser/pageripper-v2/actions/workflows/openapi.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/openapi.yml)
+[![OpenAPI spec valid](https://github.com/zackproser/pageripper-v2/actions/workflows/validate-openapi.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/validate-openapi.yml)
 [![Pulumi Deploy](https://github.com/zackproser/pageripper-v2/actions/workflows/pulumi-deploy.yml/badge.svg)](https://github.com/zackproser/pageripper-v2/actions/workflows/pulumi-deploy.yml)
 
 ![pageripperv2](./img/pageripper-v2.png)
