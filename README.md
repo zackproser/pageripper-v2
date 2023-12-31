@@ -15,7 +15,7 @@ Pageripper allows you to customize the behavior of its headless browser on a per
 
 For example, making a request to Pageripper to extract data from my portfolio site, which is a Next.js Single Page Application deployed to Vercel: 
 
-```
+```bash
 curl -sX POST \
     -H 'Content-type: application/json' \
     -d '{"url": "https://zackproser.com", "options": {"waitUntilEvent":"networkidle2"}}' \
@@ -25,7 +25,7 @@ curl -sX POST \
 
 Results in: 
 
-```
+```javascript
 {
   "emails": [],
   "twitterHandles": [],
