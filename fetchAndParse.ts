@@ -49,7 +49,7 @@ function extractTwitterHandles($: cheerio.Root): string[] {
   return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
 }
 
-function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
+export function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
   const internalUrls: string[] = [];
   const externalUrls: string[] = [];
 
