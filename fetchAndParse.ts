@@ -46,10 +46,18 @@ function extractEmails($: cheerio.Root): string[] {
 
 function extractTwitterHandles($: cheerio.Root): string[] {
   const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b/g;
-  return Array.from(new Set($('body').text().match(twitterHandleRegex) || []));
+  const handles: string[] = [];
+
+  $('body').text().replace(twitterHandleRegex, (match, handle) => {
+    handles.push(`@${handle.trim()}`);
+    return match; // This return is not used, but replace expects a function that returns a string.
+  });
+
+  return Array.from(new Set(handles));
 }
 
-export function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
+
+function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: string[], external: string[] } {
   const internalUrls: string[] = [];
   const externalUrls: string[] = [];
 
@@ -106,5 +114,14 @@ function extractLinksByPattern($: cheerio.Root, patterns: RegExp[]): string[] {
   return Array.from(new Set(links));
 }
 
-export { fetchAndParse };
+export {
+  fetchAndParse,
+  categorizeUrls,
+  extractEmails,
+  extractDownloadLinks,
+  extractEcommerceLinks,
+  extractTwitterHandles,
+  extractSocialMediaLinks,
+  extractMediaContentLinks
+};
 
