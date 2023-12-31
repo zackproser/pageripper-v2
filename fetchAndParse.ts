@@ -43,14 +43,35 @@ function extractEmails($: cheerio.Root): string[] {
 }
 
 function extractTwitterHandles($: cheerio.Root): string[] {
-  const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b/g;
+  // This regex matches both '@handle' and 'https://twitter.com/handle'
+  const twitterHandleRegex = /(?:^|\s)@(\w{1,15})\b|https:\/\/twitter\.com\/(\w{1,15})/g;
   const handles: string[] = [];
 
-  $('body').text().replace(twitterHandleRegex, (match, handle) => {
-    handles.push(`@${handle.trim()}`);
-    return match; // This return is not used, but replace expects a function that returns a string.
+  // Check both the text and the href attributes of anchor tags
+  $('body').find('*').each((i, element) => {
+    const text = $(element).text();
+    const href = $(element).attr('href') || '';
+
+    // Extract handles from text content
+    text.replace(twitterHandleRegex, (match, handle1, handle2) => {
+      const handle = handle1 || handle2;
+      if (handle) {
+        handles.push(`@${handle}`);
+      }
+      return match;
+    });
+
+    // Extract handles from href attributes if they are Twitter URLs
+    if (href.includes('twitter.com/')) {
+      const parts = href.split('/');
+      const handle = parts.pop(); // Get the last part which should be the handle
+      if (handle && !handle.includes('status')) { // Exclude tweet links
+        handles.push(`@${handle}`);
+      }
+    }
   });
 
+  // Remove duplicates
   return Array.from(new Set(handles));
 }
 
