@@ -28,9 +28,7 @@ async function fetchAndParse(targetUrl: string, options: ParseOptions) {
   const extractedData = {
     emails: options.includeEmails ? extractEmails($) : [],
     twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
-    socialMediaLinks: extractSocialMediaLinks($),
     mediaContentLinks: extractMediaContentLinks($),
-    downloadLinks: extractDownloadLinks($),
     ecommerceLinks: extractEcommerceLinks($),
     urls: options.includeUrls ? categorizeUrls($, new URL(targetUrl).hostname) : [],
   };
@@ -61,7 +59,7 @@ function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: stri
   const internalUrls: string[] = [];
   const externalUrls: string[] = [];
 
-  $('a').each((i, link) => {
+  $('a').each((_i, link) => {
     const href = $(link).attr('href');
     if (href) {
       try {
@@ -83,16 +81,11 @@ function categorizeUrls($: cheerio.Root, baseHostname: string): { internal: stri
   };
 }
 
-function extractSocialMediaLinks($: cheerio.Root): string[] {
-  const socialMediaPatterns = [/facebook\.com/, /twitter\.com/, /instagram\.com/, /linkedin\.com/];
-  return extractLinksByPattern($, socialMediaPatterns);
-}
-
 function extractMediaContentLinks($: cheerio.Root): string[] {
   const mediaContentRegex = /\.(jpeg|jpg|gif|png|bmp|mp4|avi|mov|mp3|wav|pdf|exe|docx|zip)$/i;
   const mediaLinks: string[] = [];
 
-  $('a').each((i, link) => {
+  $('a').each((_i, link) => {
     const href = $(link).attr('href')?.trim();
     if (href && mediaContentRegex.test(href)) {
       mediaLinks.push(href);
@@ -102,11 +95,6 @@ function extractMediaContentLinks($: cheerio.Root): string[] {
   return Array.from(new Set(mediaLinks)); // Remove duplicates
 }
 
-function extractDownloadLinks($: cheerio.Root): string[] {
-  const downloadPatterns = [/\.(pdf|exe|docx|zip)$/];
-  return extractLinksByPattern($, downloadPatterns);
-}
-
 function extractEcommerceLinks($: cheerio.Root): string[] {
   const ecommercePatterns = [/amazon\.com/, /ebay\.com/, /etsy\.com/, /shopify\.com/];
   return extractLinksByPattern($, ecommercePatterns);
@@ -114,7 +102,7 @@ function extractEcommerceLinks($: cheerio.Root): string[] {
 
 function extractLinksByPattern($: cheerio.Root, patterns: RegExp[]): string[] {
   const links: string[] = [];
-  $('a').each((i, link) => {
+  $('a').each((_i, link) => {
     const href = $(link).attr('href');
     if (href && patterns.some(pattern => pattern.test(href))) {
       links.push(href);
@@ -127,10 +115,8 @@ export {
   fetchAndParse,
   categorizeUrls,
   extractEmails,
-  extractDownloadLinks,
   extractEcommerceLinks,
   extractTwitterHandles,
-  extractSocialMediaLinks,
   extractMediaContentLinks
 };
 
