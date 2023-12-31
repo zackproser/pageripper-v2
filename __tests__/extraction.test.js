@@ -1,7 +1,8 @@
 import {
   categorizeUrls,
   extractEmails,
-  extractTwitterHandles
+  extractTwitterHandles,
+  extractMediaContentLinks
 } from '../fetchAndParse';
 
 import cheerio from 'cheerio';
@@ -46,3 +47,20 @@ describe('extractTwitterHandles', () => {
   });
 });
 
+describe('extractMediaContentDownloadLinks', () => {
+  it('should extract media content download links correctly from mock HTML', () => {
+    const html = fs.readFileSync(path.join(__dirname, 'mocks', 'media.html'), 'utf8');
+    const $ = cheerio.load(html);
+    const mediaLinks = extractMediaContentLinks($);
+
+    const expectedLinks = [
+      "http://example.com/files/document.pdf",
+      "http://example.com/images/graphic.png",
+      "http://example.com/images/photo.jpeg",
+      "https://example.com/audio/song.mp3",
+      "https://example.com/videos/movie.mp4"
+    ];
+
+    expect(mediaLinks.sort()).toEqual(expectedLinks.sort());
+  });
+});

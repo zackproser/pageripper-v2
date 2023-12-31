@@ -89,8 +89,17 @@ function extractSocialMediaLinks($: cheerio.Root): string[] {
 }
 
 function extractMediaContentLinks($: cheerio.Root): string[] {
-  const mediaContentPatterns = [/\.(jpeg|jpg|gif|png|bmp)$/, /\.(mp4|avi|mov)$/, /\.(mp3|wav)$/];
-  return extractLinksByPattern($, mediaContentPatterns);
+  const mediaContentRegex = /\.(jpeg|jpg|gif|png|bmp|mp4|avi|mov|mp3|wav|pdf|exe|docx|zip)$/i;
+  const mediaLinks: string[] = [];
+
+  $('a').each((i, link) => {
+    const href = $(link).attr('href')?.trim();
+    if (href && mediaContentRegex.test(href)) {
+      mediaLinks.push(href);
+    }
+  });
+
+  return Array.from(new Set(mediaLinks)); // Remove duplicates
 }
 
 function extractDownloadLinks($: cheerio.Root): string[] {
