@@ -40,7 +40,7 @@ describe('extractTwitterHandles', () => {
     const extractedHandles = extractTwitterHandles($);
 
     // Define the expected Twitter handles
-    const expectedHandles = ['@user1', '@user2', '@user3', '@user4'];
+    const expectedHandles = ['@user1', '@user2', '@user3', '@user4', '@zackproser'];
 
     // Test if the extracted handles match the expected ones
     expect(extractedHandles.sort()).toEqual(expectedHandles.sort());
