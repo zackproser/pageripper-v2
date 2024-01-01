@@ -1,14 +1,14 @@
 openapi: 3.0.3
 info:
   title: Pageripper
-  description: A data-extraction API that retrieves and categorizes links, social media handles, emails and more from webpages, including Single Page Applications (SPAs) that rely heavily on Javascript for rendering.
+  description: A data-extraction API that retrieves and categorizes links, social media handles, emails, and more from webpages, including Single Page Applications (SPAs) that rely heavily on Javascript for rendering.
   version: 1.0.0
 paths:
   /extracts:
     post:
       summary: Extracts data from a webpage
       description: >
-        Submits a request to extract data such as emails, Twitter handles, social media links, media content links, download links, e-commerce links, and categorized URLs from the specified webpage.
+        Submits a request to extract data such as emails, Twitter handles, media content links, e-commerce links, and categorized URLs from the specified webpage.
 
       requestBody:
         required: true
@@ -51,41 +51,39 @@ paths:
               schema:
                 type: object
                 properties:
-                  emails:
-                    type: array
-                    items:
-                      type: string
-                  twitterHandles:
-                    type: array
-                    items:
-                      type: string
-                  urls:
+                  data:
                     type: object
                     properties:
-                      internal:
-                        type: array
-                        items:
-                          type: string
-                      external:
-                        type: array
-                        items:
-                          type: string
-                  socialMediaLinks:
-                    type: array
-                    items:
-                      type: string
-                  mediaContentLinks:
-                    type: array
-                    items:
-                      type: string
-                  downloadLinks:
-                    type: array
-                    items:
-                      type: string
-                  ecommerceLinks:
-                    type: array
-                    items:
-                      type: string
+                      links:
+                        type: object
+                        properties:
+                          internal:
+                            type: array
+                            items:
+                              type: string
+                          external:
+                            type: array
+                            items:
+                              type: string
+                          mediaContent:
+                            type: array
+                            items:
+                              type: string
+                          ecommerce:
+                            type: array
+                            items:
+                              type: string
+                      contacts:
+                        type: object
+                        properties:
+                          emails:
+                            type: array
+                            items:
+                              type: string
+                          twitterHandles:
+                            type: array
+                            items:
+                              type: string
         '400':
           description: Invalid request (e.g., missing URL).
         '500':

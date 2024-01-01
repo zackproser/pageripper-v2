@@ -10,7 +10,6 @@ type ParseOptions = {
   waitUntilEvent?: 'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
 };
 
-// Main function to fetch and parse a webpage
 async function fetchAndParse(targetUrl: string, options: ParseOptions) {
   const browser = await puppeteer.launch({
     headless: 'new',
@@ -25,12 +24,21 @@ async function fetchAndParse(targetUrl: string, options: ParseOptions) {
   const content = await page.content();
   const $ = cheerio.load(content);
 
+  const urlData = options.includeUrls ? categorizeUrls($, new URL(targetUrl).hostname) : { internal: [], external: [] };
+
   const extractedData = {
-    emails: options.includeEmails ? extractEmails($) : [],
-    twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
-    mediaContentLinks: extractMediaContentLinks($),
-    ecommerceLinks: extractEcommerceLinks($),
-    urls: options.includeUrls ? categorizeUrls($, new URL(targetUrl).hostname) : [],
+    data: {
+      links: {
+        internal: urlData.internal,
+        external: urlData.external,
+        mediaContent: extractMediaContentLinks($),
+        ecommerce: extractEcommerceLinks($),
+      },
+      contacts: {
+        emails: options.includeEmails ? extractEmails($) : [],
+        twitterHandles: options.includeTwitterHandles ? extractTwitterHandles($) : [],
+      },
+    },
   };
 
   await browser.close();
