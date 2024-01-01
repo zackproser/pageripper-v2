@@ -1,0 +1,20 @@
+name: OpenAPI Dredd Test
+on: [push, pull_request]
+jobs:
+  dredd-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18' # or the version you prefer
+      - name: Install dependencies
+        run: npm install
+      - name: Install Dredd
+        run: npm install -g dredd
+      - name: Start server
+        run: npm start
+      - name: Run Dredd
+        run: dredd ./spec/openapi.yml http://localhost:3000
