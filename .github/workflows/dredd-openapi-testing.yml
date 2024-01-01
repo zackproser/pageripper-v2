@@ -1,5 +1,5 @@
 name: OpenAPI Dredd Test
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   dredd-test:
     runs-on: ubuntu-latest
@@ -15,6 +15,6 @@ jobs:
       - name: Install Dredd
         run: npm install -g dredd
       - name: Start server
-        run: npm start
+        run: npm start &
       - name: Run Dredd
         run: dredd ./spec/openapi.yml http://localhost:3000
