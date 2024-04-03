@@ -37,7 +37,11 @@ export const repoDigest = image.repoDigest
 
 // Build and publish the Docker image to the ECR repository.
 // Create a new VPC for our ECS service, or use an existing one.
-const vpc = new awsx.ec2.Vpc("custom", {})
+const vpc = new awsx.ec2.Vpc("custom", {
+  natGateways: {
+    strategy: awsx.ec2.NatGatewayStrategy.Single,
+  }
+})
 
 // Create a security group for the load balancer
 const lbSecurityGroup = new aws.ec2.SecurityGroup("lb-security-group", {
