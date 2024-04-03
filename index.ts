@@ -38,6 +38,7 @@ export const repoDigest = image.repoDigest
 // Build and publish the Docker image to the ECR repository.
 // Create a new VPC for our ECS service, or use an existing one.
 const vpc = new awsx.ec2.Vpc("custom", {
+  availabilityZoneNames: ['us-east-1a'],
   natGateways: {
     strategy: awsx.ec2.NatGatewayStrategy.Single,
   }
@@ -105,7 +106,7 @@ const apiService = new awsx.ecs.FargateService("pageripper", {
   networkConfiguration: {
     assignPublicIp: true,
     securityGroups: [apiSecurityGroup.id],
-    subnets: vpc.publicSubnetIds,
+    subnets: [vpc.publicSubnetIds[0]],
   },
   taskDefinitionArgs: {
     container: {
